@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Translator</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background:#111827;
+    color:white;
+}
+.container{
+    background:#1f2937;
+    padding:20px;
+    border-radius:12px;
+}
+h1{text-align:center;}
+textarea{
+    width:100%;
+    height:140px;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin:10px 0;
+}
+select,button{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:8px;
+}
+button{
+    cursor:pointer;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>AI Translator</h1>
+
+<select id="targetLang">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="or">Odia</option>
+</select>
+
+<textarea id="inputText" placeholder="Enter text..."></textarea>
+
+<button onclick="translateText()">Translate</button>
+<button onclick="copyText()">Copy Result</button>
+
+<textarea id="outputText" placeholder="Translation..." readonly></textarea>
+</div>
+
+<script>
+async function translateText(){
+    let text=document.getElementById("inputText").value;
+    let target=document.getElementById("targetLang").value;
+
+    try{
+        let response=await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=auto|${target}`
+        );
+        let data=await response.json();
+        document.getElementById("outputText").value =
+        data.responseData.translatedText;
+    }catch(err){
+        document.getElementById("outputText").value="Translation failed.";
+    }
+}
+
+function copyText(){
+    let text=document.getElementById("outputText");
+    text.select();
+    document.execCommand("copy");
+    alert("Copied!");
+}
+</script>
+</body>
+</html>

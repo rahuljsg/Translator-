@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheCryptoBoi Translator</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:white;max-width:900px;margin:auto;padding:20px}
+.box{background:#1e293b;padding:20px;border-radius:15px}
+h1{text-align:center}
+select,textarea,button{width:100%;padding:12px;margin:8px 0;border-radius:8px}
+textarea{height:140px}
+button{font-weight:bold;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>TheCryptoBoi Translator</h1>
+
+<label>From</label>
+<select id="source">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="or">Odia</option>
+</select>
+
+<label>To</label>
+<select id="target">
+<option value="hi">Hindi</option>
+<option value="en">English</option>
+<option value="or">Odia</option>
+</select>
+
+<textarea id="input" placeholder="Enter text"></textarea>
+
+<button onclick="translateText()">Translate</button>
+
+<textarea id="output" readonly placeholder="Result"></textarea>
+</div>
+
+<script>
+async function translateText(){
+ const text=document.getElementById("input").value;
+ const source=document.getElementById("source").value;
+ const target=document.getElementById("target").value;
+
+ try{
+   const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`;
+   const res=await fetch(url);
+   const data=await res.json();
+   document.getElementById("output").value=data.responseData.translatedText;
+ }catch(e){
+   document.getElementById("output").value="Translation Error";
+ }
+}
+</script>
+</body>
+</html>
